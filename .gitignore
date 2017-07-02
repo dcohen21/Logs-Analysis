@@ -1,0 +1,7 @@
+.idea/
+.idea/*
+/.idea
+*.DS_Store
+.AppleDouble
+.LSOverride
+*.pyc
