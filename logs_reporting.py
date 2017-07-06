@@ -73,10 +73,13 @@ def error_days():
     results = cursor.fetchall()
     print('\n\n' + "Days in which 404 errors accounted for >1% of requests:" + '\n')
     for item in results:
-        print(str(item[3]) + ": " + str(item[4]))
+        print(str(item[3]) + ": " + str(round(item[4], 2)) + "%")
+    print()
 
 
 if __name__ == "__main__":
+    print("-----------------------------------")
     popular_articles()
     popular_authors()
     error_days()
+    print("-----------------------------------")
