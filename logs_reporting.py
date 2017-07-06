@@ -12,16 +12,17 @@ def popular_articles():
     connection = psycopg2.connect(database=DB_NAME)
     cursor = connection.cursor()
     cursor.execute(
-        """select articles.title, count(log.path) 
-        from articles, log 
-        where log.path like '%'||articles.slug 
-        group by articles.title 
+        """select articles.title, count(log.path)
+        from articles, log
+        where log.path like '%'||articles.slug
+        group by articles.title
         order by count(log.path) desc limit 3;"""
     )
     results = cursor.fetchall()
     print('\n\n' + "Most popular three articles of all time:" + '\n')
     for item in results:
-        print("\"" + item[0].title() + "\": " + str("{:,}".format(item[1])) + " views")
+        print("\"" + item[0].title() + "\": " + str("{:,}".format(item[1])) +
+              " views")
     connection.close()
 
 
@@ -31,20 +32,21 @@ def popular_authors():
     connection = psycopg2.connect(database=DB_NAME)
     cursor = connection.cursor()
     cursor.execute(
-        """create view author_slug as 
-        select authors.name, articles.slug 
-        from articles, authors 
+        """create view author_slug as
+        select authors.name, articles.slug
+        from articles, authors
         where articles.author = authors.id;"""
     )
     cursor.execute(
-        """select author_slug.name, count(log.path) 
-        from author_slug, log 
-        where log.path like '%'||author_slug.slug 
-        group by author_slug.name 
+        """select author_slug.name, count(log.path)
+        from author_slug, log
+        where log.path like '%'||author_slug.slug
+        group by author_slug.name
         order by count(log.path) desc;"""
     )
     results = cursor.fetchall()
-    print('\n\n' + "Authors listed by popularity as defined by total article views:" + '\n')
+    print('\n\n' + "Authors listed by popularity as defined by "
+                   "total article views:" + '\n')
     for item in results:
         print(item[0] + ": " + str("{:,}".format(item[1])) + " views")
     connection.close()
@@ -54,24 +56,25 @@ def error_days():
     connection = psycopg2.connect(database=DB_NAME)
     cursor = connection.cursor()
     cursor.execute(
-        """create view error_view as 
-        select count(*)::numeric as num, time::date as day 
-        from log where status != '200 OK' 
+        """create view error_view as
+        select count(*)::numeric as num, time::date as day
+        from log where status != '200 OK'
         group by day order by day desc;"""
     )
     cursor.execute(
-        """create view total_view as 
-        select count(*)::numeric as num, time::date as day 
+        """create view total_view as
+        select count(*)::numeric as num, time::date as day
         from log group by day;"""
     )
     cursor.execute(
-        """select *, (error_view.num/total_view.num)*100 as pct 
-        from total_view 
-        join error_view on total_view.day=error_view.day 
+        """select *, (error_view.num/total_view.num)*100 as pct
+        from total_view
+        join error_view on total_view.day=error_view.day
         where (error_view.num/total_view.num)*100 > 1;"""
     )
     results = cursor.fetchall()
-    print('\n\n' + "Days in which 404 errors accounted for >1% of requests:" + '\n')
+    print('\n\n' + "Days in which 404 errors accounted for >1% of "
+                   "requests:" + '\n')
     for item in results:
         print(str(item[3]) + ": " + str(round(item[4], 2)) + "%")
     print('\n')
