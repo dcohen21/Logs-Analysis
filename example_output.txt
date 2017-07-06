@@ -1,0 +1,25 @@
+
+-----------------------------------
+
+
+Most popular three articles of all time:
+
+"Candidate Is Jerk, Alleges Rival": 338,647 views
+"Bears Love Berries, Alleges Bear": 253,801 views
+"Bad Things Gone, Say Good People": 170,098 views
+
+
+Authors listed by popularity as defined by total article views:
+
+Ursula La Multa: 507,594 views
+Rudolf von Treppenwitz: 423,457 views
+Anonymous Contributor: 170,098 views
+Markoff Chaney: 84,557 views
+
+
+Days in which 404 errors accounted for >1% of requests:
+
+2016-07-17: 2.26%
+
+
+-----------------------------------
