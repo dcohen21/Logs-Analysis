@@ -21,7 +21,7 @@ def popular_articles():
     results = cursor.fetchall()
     print('\n\n' + "Most popular three articles of all time:" + '\n')
     for item in results:
-        print("\"" + item[0].title() + "\": " + str(item[1]) + " views")
+        print("\"" + item[0].title() + "\": " + str("{:,}".format(item[1])) + " views")
     connection.close()
 
 
@@ -46,7 +46,7 @@ def popular_authors():
     results = cursor.fetchall()
     print('\n\n' + "Authors listed by popularity as defined by total article views:" + '\n')
     for item in results:
-        print(item[0] + ": " + str(item[1]) + " views")
+        print(item[0] + ": " + str("{:,}".format(item[1])) + " views")
     connection.close()
 
 
@@ -74,12 +74,12 @@ def error_days():
     print('\n\n' + "Days in which 404 errors accounted for >1% of requests:" + '\n')
     for item in results:
         print(str(item[3]) + ": " + str(round(item[4], 2)) + "%")
-    print()
+    print('\n')
 
 
 if __name__ == "__main__":
-    print("-----------------------------------")
+    print('\n' + "-----------------------------------")
     popular_articles()
     popular_authors()
     error_days()
-    print("-----------------------------------")
+    print("-----------------------------------" + '\n')
