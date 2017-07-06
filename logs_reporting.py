@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# Udacity FSND Project 3: Logs Analysis
+# David Cohen
 
 import psycopg2
 
@@ -53,6 +55,8 @@ def popular_authors():
 
 
 def error_days():
+    """List days that had >1% 404 errors"""
+
     connection = psycopg2.connect(database=DB_NAME)
     cursor = connection.cursor()
     cursor.execute(
