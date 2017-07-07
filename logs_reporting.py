@@ -56,7 +56,7 @@ def error_days():
     connection = psycopg2.connect(database=DB_NAME)
     cursor = connection.cursor()
     cursor.execute(
-        """select *, (error_view.num/total_view.num)*100 as pct
+        """select total_view.day, (error_view.num/total_view.num)*100 as pct
         from total_view
         join error_view on total_view.day=error_view.day
         where (error_view.num/total_view.num)*100 > 1;"""
@@ -64,8 +64,8 @@ def error_days():
     results = cursor.fetchall()
     print('\n\n' + "Days in which 404 errors accounted for >1% of "
                    "requests:" + '\n')
-    for item in results:
-        print(str(item[3]) + ": " + str(round(item[4], 2)) + "%")
+    for errday, errpercent in results:
+        print(str(errday) + ": " + str(round(errpercent, 2)) + "%")
     print('\n')
 
 
