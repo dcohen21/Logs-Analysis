@@ -16,7 +16,8 @@ def popular_articles():
     cursor.execute(
         """select articles.title, count(log.path)
         from articles, log
-        where log.path like '%'||articles.slug
+        where log.path = '/article/' || articles.slug
+          and log.status = '200 OK'
         group by articles.title
         order by count(log.path) desc limit 3;"""
     )
@@ -42,7 +43,8 @@ def popular_authors():
     cursor.execute(
         """select author_slug.name, count(log.path)
         from author_slug, log
-        where log.path like '%'||author_slug.slug
+        where log.path = '/article/' || author_slug.slug
+          and log.status = '200 OK'
         group by author_slug.name
         order by count(log.path) desc;"""
     )
