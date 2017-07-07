@@ -25,6 +25,30 @@ This project uses Python3 to interact with a PostgreSQL database containing info
 2. Move `newsdata.sql` into the vagrant folder.
 3. To load the data, run terminal command: `psql -d news -f newsdata.sql`
 
+##### Create views:
+In order to run the reporting too, you need to create a few views in the `news` database. To do so, log into vagrant using `vagrant ssh`, and then open the PostgreSQL database using `psql news`. Then execute the following SQL statements:
+
+```sql
+create view author_slug as
+        select authors.name, articles.slug
+        from articles, authors
+        where articles.author = authors.id;
+```
+```sql
+create view error_view as
+        select count(*)::numeric as num, time::date as day
+        from log
+        where status != '200 OK'
+        group by day
+        order by day desc;
+```
+```sql
+create view total_view as
+        select count(*)::numeric as num, time::date as day
+        from log
+        group by day;
+```
+
 ##### Run the reporting tool
 1. Download/clone this GitHub repository.
 2. Move `logs_reporting.py` into the vagrant folder.

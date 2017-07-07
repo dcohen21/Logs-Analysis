@@ -35,12 +35,6 @@ def popular_authors():
     connection = psycopg2.connect(database=DB_NAME)
     cursor = connection.cursor()
     cursor.execute(
-        """create view author_slug as
-        select authors.name, articles.slug
-        from articles, authors
-        where articles.author = authors.id;"""
-    )
-    cursor.execute(
         """select author_slug.name, count(log.path)
         from author_slug, log
         where log.path = '/article/' || author_slug.slug
@@ -61,17 +55,6 @@ def error_days():
 
     connection = psycopg2.connect(database=DB_NAME)
     cursor = connection.cursor()
-    cursor.execute(
-        """create view error_view as
-        select count(*)::numeric as num, time::date as day
-        from log where status != '200 OK'
-        group by day order by day desc;"""
-    )
-    cursor.execute(
-        """create view total_view as
-        select count(*)::numeric as num, time::date as day
-        from log group by day;"""
-    )
     cursor.execute(
         """select *, (error_view.num/total_view.num)*100 as pct
         from total_view
