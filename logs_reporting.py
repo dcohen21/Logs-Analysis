@@ -68,15 +68,12 @@ def popular_authors():
 def error_days():
     """List days that had >1% 404 errors"""
 
-    connection = psycopg2.connect(database=DB_NAME)
-    cursor = connection.cursor()
-    cursor.execute(
+    results = fetch_query(
         """select total_view.day, (error_view.num/total_view.num)*100 as pct
         from total_view
         join error_view on total_view.day=error_view.day
         where (error_view.num/total_view.num)*100 > 1;"""
     )
-    results = cursor.fetchall()
     print('\n\n' + "Days in which 404 errors accounted for >1% of "
                    "requests:" + '\n')
     for errday, errpercent in results:
