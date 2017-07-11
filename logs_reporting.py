@@ -51,9 +51,7 @@ def popular_articles():
 def popular_authors():
     """List authors in order of popularity based on total article views"""
 
-    connection = psycopg2.connect(database=DB_NAME)
-    cursor = connection.cursor()
-    cursor.execute(
+    results = fetch_query(
         """select author_slug.name, count(log.path)
         from author_slug, log
         where log.path = '/article/' || author_slug.slug
@@ -61,12 +59,10 @@ def popular_authors():
         group by author_slug.name
         order by count(log.path) desc;"""
     )
-    results = cursor.fetchall()
     print('\n\n' + "Authors listed by popularity as defined by "
                    "total article views:" + '\n')
     for item in results:
         print(item[0] + ": " + str("{:,}".format(item[1])) + " views")
-    connection.close()
 
 
 def error_days():
