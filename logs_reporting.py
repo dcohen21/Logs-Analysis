@@ -4,16 +4,37 @@
 # David Cohen
 
 import psycopg2
+import sys
 
 DB_NAME = "news"
+
+
+def connect():
+    """Connects to the PostgreSQL databases, returns a db connection."""
+
+    try:
+        connection = psycopg2.connect(database=DB_NAME)
+        cursor = connection.cursor()
+        return connection, cursor
+    except psycopg2.Error as e:
+        print("Unable to connect to database")
+        sys.exit(1)
+
+
+def fetch_query(query):
+    """Connects to the database, fetches a query, and returns results"""
+
+    connection, cursor = connect()
+    cursor.execute(query)
+    results = cursor.fetchall()
+    connection.close()
+    return results
 
 
 def popular_articles():
     """Find three most popular articles of all time"""
 
-    connection = psycopg2.connect(database=DB_NAME)
-    cursor = connection.cursor()
-    cursor.execute(
+    results = fetch_query(
         """select articles.title, count(log.path)
         from articles, log
         where log.path = '/article/' || articles.slug
@@ -21,12 +42,10 @@ def popular_articles():
         group by articles.title
         order by count(log.path) desc limit 3;"""
     )
-    results = cursor.fetchall()
     print('\n\n' + "Most popular three articles of all time:" + '\n')
     for item in results:
         print("\"" + item[0].title() + "\": " + str("{:,}".format(item[1])) +
               " views")
-    connection.close()
 
 
 def popular_authors():
