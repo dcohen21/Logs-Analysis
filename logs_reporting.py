@@ -32,7 +32,7 @@ def fetch_query(query):
 
 
 def popular_articles():
-    """Find three most popular articles of all time"""
+    """Prints three most popular articles of all time"""
 
     results = fetch_query(
         """select articles.title, count(log.path)
@@ -49,7 +49,7 @@ def popular_articles():
 
 
 def popular_authors():
-    """List authors in order of popularity based on total article views"""
+    """Prints authors in order of popularity based on total article views"""
 
     results = fetch_query(
         """select author_slug.name, count(log.path)
@@ -66,7 +66,7 @@ def popular_authors():
 
 
 def error_days():
-    """List days that had >1% 404 errors"""
+    """Prints days that had >1% 404 errors"""
 
     results = fetch_query(
         """select total_view.day, (error_view.num/total_view.num)*100 as pct
